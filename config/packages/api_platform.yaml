@@ -8,3 +8,15 @@ api_platform:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
             standard_put: true
+
+    resource_class_directories:
+        - '%kernel.project_dir%/src/Entity'
+    doctrine:
+        # To enable or disable Doctrine ORM support.
+        enabled: true
+
+    # Enable the Swagger documentation and export.
+    enable_swagger: true
+
+    # Enable Swagger UI.
+    enable_swagger_ui: true
