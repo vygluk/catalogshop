@@ -1,13 +1,41 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Product;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ProductVariantRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/product-variants',
+            status: 200,
+        ),
+        new Get(
+            uriTemplate: '/product-variants/{id}',
+            status: 200,
+        ),
+        new Post(
+            uriTemplate: '/product-variants/{id}',
+            status: 201,
+        ),
+        new Put(
+            uriTemplate: '/product-variants/{id}',
+            status: 201,
+        ),
+        new Delete(
+            uriTemplate: '/product-variants/{id}',
+            status: 204,
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: ProductVariantRepository::class)]
-#[ApiResource]
 class ProductVariant
 {
     #[ORM\Id]
