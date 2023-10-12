@@ -1,47 +1,33 @@
-# USER root
+FROM php:8.1-fpm-alpine
 
-# ARG USER_ID
-# ARG GROUP_ID
-# RUN service-user
-#
-# ENV PHP_DATE_TIMEZONE=Europe/Vilnius
-#
-# USER nobody
+USER root
 
-# Use an official PHP-FPM image as the base image
-FROM php:8.1-fpm
-
-RUN apt-get update && apt-get install -y \
+# Install system dependencies and PHP extensions
+RUN apk add \
     git \
     zip \
     curl \
-    sudo \
-    unzip
-
-
-# Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
-    # Add any system dependencies you need here
-
+    unzip \
     # Install PHP extensions using PECL or from official repositories
     && docker-php-ext-install pdo pdo_mysql # Add more extensions as needed
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-# Set the working directory within the container
+COPY --chmod=755 --from=composer:latest /usr/bin/composer /usr/local/bin/
+
 WORKDIR /var/www
 
-# Copy your application code into the container
-COPY . /var/www
+ARG USER_ID
+ARG GROUP_ID
 
-# Expose the port (if necessary)
-# EXPOSE 9000
+    # Remove user with the same uid if it exists
+RUN (deluser --remove-home $(getent passwd $USER_ID | cut -d: -f1) || true) \
+    # Remove user php
+    && (deluser --remove-home php || true) \
+    && apk add shadow \
+    # Add group for php if it does not already exist
+    && groupadd -g $GROUP_ID -f php \
+    # Add user php
+    && useradd -u $USER_ID -g $GROUP_ID -s /bin/bash -d /home/php -m php
 
-# Define any environment variables (if necessary)
-# ENV APP_ENV=production
+USER php
 
-# You can add more configuration and setup steps here as needed.
-
-# Start PHP-FPM
 CMD ["php-fpm"]
-
-# You can also specify any additional startup commands or entry points if needed.

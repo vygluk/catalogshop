@@ -25,7 +25,7 @@ use Doctrine\ORM\Mapping as ORM;
             status: 200,
         ),
         new Post(
-            uriTemplate: '/products/{id}',
+            uriTemplate: '/products',
             status: 201,
         ),
         new Put(
