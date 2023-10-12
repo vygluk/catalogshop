@@ -1,16 +1,44 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Product;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Entity\Category\Category;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/products',
+            status: 200,
+        ),
+        new Get(
+            uriTemplate: '/products/{id}',
+            status: 200,
+        ),
+        new Post(
+            uriTemplate: '/products/{id}',
+            status: 201,
+        ),
+        new Put(
+            uriTemplate: '/products/{id}',
+            status: 201,
+        ),
+        new Delete(
+            uriTemplate: '/products/{id}',
+            status: 204,
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource]
 class Product
 {
     #[ORM\Id]

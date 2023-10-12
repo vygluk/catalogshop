@@ -1,15 +1,44 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Category;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Entity\Product\Product;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/categories',
+            status: 200,
+        ),
+        new Get(
+            uriTemplate: '/categories/{id}',
+            status: 200,
+        ),
+        new Post(
+            uriTemplate: '/categories/{id}',
+            status: 201,
+        ),
+        new Put(
+            uriTemplate: '/categories/{id}',
+            status: 201,
+        ),
+        new Delete(
+            uriTemplate: '/categories/{id}',
+            status: 204,
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
-#[ApiResource]
 class Category
 {
     #[ORM\Id]

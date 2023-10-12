@@ -5,11 +5,39 @@ declare(strict_types=1);
 namespace App\Entity\User;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/users',
+            status: 200,
+        ),
+        new Get(
+            uriTemplate: '/users/{id}',
+            status: 200,
+        ),
+        new Post(
+            uriTemplate: '/users/{id}',
+            status: 201,
+        ),
+        new Put(
+            uriTemplate: '/users/{id}',
+            status: 201,
+        ),
+        new Delete(
+            uriTemplate: '/users/{id}',
+            status: 204,
+        ),
+    ]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
 class User implements UserInterface
 {
     #[ORM\Id]
