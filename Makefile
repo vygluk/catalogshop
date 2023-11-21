@@ -12,6 +12,10 @@ endif
 USER_ID!=id -u
 GROUP_ID!=id -g
 PROJECT_NAME=symfony_vue-backend
+
+DOCKER_BUILDKIT=1
+COMPOSE_DOCKER_CLI_BUILD=1
+
 ifndef PHPUNIT_CONFIGURATION
 PHPUNIT_CONFIGURATION := phpunit.xml.dist
 endif
