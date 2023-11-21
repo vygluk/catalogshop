@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+    php:
+        build:
+            context: ./docker/php
+            args:
+                USER_ID: "${USER_ID}"
+                GROUP_ID: "${GROUP_ID}"
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+        environment:
+            - DATABASE_URL=mysql://app_shop:${MYSQL_PASSWORD:-nopassword}@mysql/app_shop
+
+    mysql:
+        image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-nopassword}
+            - MYSQL_DATABASE=app_shop
+            - MYSQL_USER=app_shop
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-nopassword}
+        ports:
+            - 3306:3306
+        cap_add:
+            - SYS_NICE # prevent "mbind: Operation not permitted" errors
+
+    nginx:
+        build:
+            context: ./docker/nginx
+            args:
+                USER_ID: "${USER_ID}"
+                GROUP_ID: "${GROUP_ID}"
+        volumes:
+            - ./public:/var/www/public
+        ports:
+            - 80:8080
+        depends_on:
+            - php
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: nopassword
+            UPLOAD_LIMIT: 100M
+        ports:
+            - "${PMA_PORT:-81}:80"
+
+volumes:
+  mysql-data:
+    driver: local
