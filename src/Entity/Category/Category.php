@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
         new GetCollection(
             uriTemplate: '/categories',
             status: 200,
+            security: "is_granted('ROLE_USER')"
         ),
         new Get(
             uriTemplate: '/categories/{id}',

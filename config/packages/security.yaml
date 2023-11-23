@@ -21,6 +21,10 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
