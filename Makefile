@@ -57,7 +57,7 @@ status:
 	$(DC) -p $(PROJECT_NAME) ps
 
 exec-php:
-	$(DC) -p $(PROJECT_NAME) exec -it php bash
+	$(DC) -p $(PROJECT_NAME) exec -it php sh
 
 exec-nginx:
 	$(DC) -p $(PROJECT_NAME) exec -it nginx sh
